@@ -282,12 +282,19 @@ library DebtLogic {
 
             if (assetsToDeposit > 0) {
                 address _asset = vault.asset();
-                IERC20(_asset).approve(strategy, assetsToDeposit);
+                IERC20(_asset).safeIncreaseAllowance(strategy, assetsToDeposit);
                 uint256 preBalance = IERC20(_asset).balanceOf(address(this));
 
                 IStrategy(strategy).deposit(assetsToDeposit, address(this));
                 uint256 postBalance = IERC20(_asset).balanceOf(address(this));
-                IERC20(_asset).approve(strategy, 0);
+                uint256 remainingAllowance = IERC20(_asset).allowance(
+                    address(this),
+                    strategy
+                );
+                IERC20(_asset).safeDecreaseAllowance(
+                    strategy,
+                    remainingAllowance
+                );
                 assetsToDeposit = preBalance - postBalance;
                 vault.totalIdle -= assetsToDeposit;
                 vault.totalDebt += assetsToDeposit;

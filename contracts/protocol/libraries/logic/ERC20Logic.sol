@@ -43,12 +43,7 @@ library ERC20Logic {
         address spender,
         uint256 value
     ) internal {
-        return
-            IVault(vaultData.addressVault).spendAllowance(
-                owner,
-                spender,
-                value
-            );
+        IVault(vaultData.addressVault).spendAllowance(owner, spender, value);
     }
 
     function _mint(
