@@ -20,6 +20,12 @@ library UnrealisedLossesLogic {
             return 0;
 
         uint256 numerator = assetsNeeded * strategyAssets;
+
+        require(
+            strategyAssets == 0 || numerator / strategyAssets == assetsNeeded,
+            " Overflow detected "
+        );
+
         uint256 usersShareOfLoss = assetsNeeded -
             (numerator / strategyCurrentDebt);
         if (numerator % strategyCurrentDebt != 0) usersShareOfLoss += 1;

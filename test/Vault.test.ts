@@ -401,7 +401,7 @@ describe("Vault", () => {
       let debtAmount = amount / 2n;
       let loss = amount / 4n;
       await updateDebt(vault, strategy, debtAmount, governance);
-
+      await vault.connect(alice).withdraw.staticCallResult(amount, alice.address, alice.address);
       //await setLoss(strategy, loss, governance);
     });
   });
