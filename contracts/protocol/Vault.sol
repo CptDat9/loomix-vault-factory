@@ -309,6 +309,33 @@ contract Vault is
         return shares;
     }
 
+    function withdrawWithMaxLoss(
+        uint256 assets,
+        address receiver,
+        address owner,
+        uint256 maxLoss
+    ) public returns (uint256) {
+        ManagementFeeLogic.caculateManagementFee(vaultData);
+        uint256 shares = ERC4626Logic.convertToShares(
+            vaultData,
+            assets,
+            Math.Rounding.Ceil
+        );
+
+        WithdrawLogic.executeRedeem(
+            vaultData,
+            _msgSender(),
+            receiver,
+            owner,
+            assets,
+            shares,
+            maxLoss,
+            new address[](0)
+        );
+
+        return shares;
+    }
+
     function convertToAssets(
         uint256 shares
     ) public view override(IERC4626, ERC4626Upgradeable) returns (uint256) {
