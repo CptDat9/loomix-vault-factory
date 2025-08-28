@@ -6,6 +6,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IRoleModule.sol";
 import "../interfaces/IAccountant.sol";
@@ -31,7 +32,8 @@ contract Vault is
     VaultStorage,
     ERC4626Upgradeable,
     ReentrancyGuardUpgradeable,
-    AccessControlUpgradeable
+    AccessControlUpgradeable,
+    UUPSUpgradeable
 {
     using DepositLogic for DataTypes.VaultData;
     using WithdrawLogic for DataTypes.VaultData;
@@ -46,18 +48,22 @@ contract Vault is
         string memory _name,
         string memory _symbol,
         uint256 _profitMaxUnlockTime,
-        address governance
+        address governance,
+        address factory        
     ) public initializer {
         __ERC20_init(_name, _symbol);
         __ERC4626_init(_asset);
         __ReentrancyGuard_init();
         __AccessControl_init();
+        __UUPSUpgradeable_init();        
 
         InitializeLogic.ExecuteInitialize(vaultData, _profitMaxUnlockTime);
 
         _grantRole(Constants.ROLE_GOVERNANCE_MANAGER, governance);
         _grantRole(Constants.ROLE_ADD_STRATEGY_MANAGER, governance);
-
+        _grantRole(Constants.ROLE_ADD_STRATEGY_MANAGER, factory);
+        _grantRole(Constants.ROLE_DEBT_MANAGER, factory);
+        _grantRole(Constants.ROLE_MAX_DEBT_MANAGER, factory);
         _setRoleAdmin(
             Constants.ROLE_GOVERNANCE_MANAGER,
             Constants.ROLE_GOVERNANCE_MANAGER
@@ -548,4 +554,6 @@ contract Vault is
     function minimumTotalIdle() public view returns (uint256) {
         return vaultData.minimumTotalIdle;
     }
+    /* uups */
+    function _authorizeUpgrade(address newImplementation) internal override onlyRole(Constants.ROLE_GOVERNANCE_MANAGER) {}    
 }

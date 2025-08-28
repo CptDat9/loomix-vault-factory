@@ -36,6 +36,13 @@ const config: HardhatUserConfig = {
       live: true,
       deploy: ["deploy/base"],
     },
+    arbitrumFork: {
+      url: process.env.ARBITRUM_FORK_RPC_URL!,
+      chainId: 0xa4b1, 
+      accounts,
+      gasPrice: 100e9,
+      deploy: ["deploy/arbitrumFork"],
+    },
   },
   solidity: {
     compilers: [
