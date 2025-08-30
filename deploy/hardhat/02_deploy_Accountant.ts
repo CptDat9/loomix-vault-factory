@@ -1,4 +1,4 @@
-import { addresses } from "./../../utils/address";
+import { addresses } from "../../utils/address";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
