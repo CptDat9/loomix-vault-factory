@@ -43,6 +43,13 @@ const config: HardhatUserConfig = {
       gasPrice: 100e9,
       deploy: ["deploy/arbitrumFork"],
     },
+    baseFork: {
+      url: process.env.BASE_FORK_RPC_URL!,
+      chainId: 31337, 
+      accounts,
+      gasPrice: 100e9,
+      deploy: ["deploy/baseFork"],
+    },
   },
   solidity: {
     compilers: [

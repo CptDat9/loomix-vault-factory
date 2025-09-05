@@ -58,9 +58,22 @@ contract Vault is
         __UUPSUpgradeable_init();        
 
         InitializeLogic.ExecuteInitialize(vaultData, _profitMaxUnlockTime);
-
+        /* goveranance (owner role) */
         _grantRole(Constants.ROLE_GOVERNANCE_MANAGER, governance);
         _grantRole(Constants.ROLE_ADD_STRATEGY_MANAGER, governance);
+        _grantRole(Constants.ROLE_REVOKE_STRATEGY_MANAGER, governance);
+        _grantRole(Constants.ROLE_ACCOUNTANT_MANAGER, governance);
+        _grantRole(Constants.ROLE_QUEUE_MANAGER, governance);
+        _grantRole(Constants.ROLE_REPORTING_MANAGER, governance);
+        _grantRole(Constants.ROLE_DEBT_MANAGER, governance);
+        _grantRole(Constants.ROLE_MAX_DEBT_MANAGER, governance);
+        _grantRole(Constants.ROLE_DEPOSIT_LIMIT_MANAGER, governance);
+        _grantRole(Constants.ROLE_WITHDRAW_LIMIT_MANAGER, governance);
+        _grantRole(Constants.ROLE_MINIMUM_IDLE_MANAGER, governance);
+        _grantRole(Constants.ROLE_PROFIT_UNLOCK_MANAGER, governance);
+        _grantRole(Constants.ROLE_DEBT_PURCHASER, governance);
+        _grantRole(Constants.ROLE_EMERGENCY_MANAGER, governance);
+        /* factory Role */        
         _grantRole(Constants.ROLE_ADD_STRATEGY_MANAGER, factory);
         _grantRole(Constants.ROLE_DEBT_MANAGER, factory);
         _grantRole(Constants.ROLE_MAX_DEBT_MANAGER, factory);
